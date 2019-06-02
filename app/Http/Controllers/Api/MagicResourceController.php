@@ -12,21 +12,8 @@ class MagicResourceController extends Controller
     protected $model;
 
     public function __construct() {
-        $this->model = static::getResourceClass();
+        $this->model = Cms::getResourceClass(\Request::segment(2));
     }
-
-    public static function getResourceClass() {
-
-        $collection = \Request::segment(2);
-        $resources = Cms::getMagicResources();
-
-        $resource = $resources->filter(function ($resource) use ($collection) {
-            return $resource::getCollectionName() == $collection;
-        })->first();
-
-        return $resource;
-    }
-
 
     /**
      * Display a listing of the resource.

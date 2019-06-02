@@ -21,11 +21,21 @@ Route::get('/', function () {
 });
 
 Route::get('/admin', function () {
-
-
-
-
     return view('admin', [
         'resources' => Cms::getMagicResources()
+    ]);
+});
+
+Route::get('/admin/{type}', function ($type) {
+    return view('collection', [
+        'resources' => Cms::getMagicResources(),
+        'collection' => Cms::getResourceClass($type)::all(),
+    ]);
+});
+
+Route::get('/admin/{type}/{id}', function ($type, $id) {
+    return view('resource', [
+        'resources' => Cms::getMagicResources(),
+        'resource' => Cms::getResourceClass($type)::findOrFail($id),
     ]);
 });

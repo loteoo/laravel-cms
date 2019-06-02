@@ -19,4 +19,16 @@ class Cms {
             return $class;
         });
     }
+
+    public static function getResourceClass($collection) {
+
+        $resources = Cms::getMagicResources();
+
+        $resource = $resources->filter(function ($resource) use ($collection) {
+            return $resource::getCollectionName() == $collection;
+        })->first();
+
+        return $resource;
+    }
+
 }
