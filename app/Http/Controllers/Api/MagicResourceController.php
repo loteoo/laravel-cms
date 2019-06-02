@@ -9,10 +9,10 @@ use App\Http\Controllers\Controller;
 class MagicResourceController extends Controller
 {
 
-    protected $model;
+    protected $class;
 
     public function __construct() {
-        $this->model = Cms::getResourceClass(\Request::segment(2));
+        $this->class = Cms::getResourceClass(\Request::segment(2));
     }
 
     /**
@@ -22,7 +22,13 @@ class MagicResourceController extends Controller
      */
     public function index(Request $request)
     {
-        return $this->model::all();
+        $items = $this->class::all();
+
+        foreach ($items as $item) {
+            $item->fields;
+        }
+
+        return $items;
     }
 
     /**
@@ -33,7 +39,14 @@ class MagicResourceController extends Controller
      */
     public function store(Request $request)
     {
+
         return $this->model::create($request->all());
+        // $model = new $this->class;
+        // foreach ($request->all() as $key => $value) {
+        //      $model->$key = $value;
+        // }
+        // $model->save();
+        // return $model;
     }
 
     /**
@@ -44,7 +57,7 @@ class MagicResourceController extends Controller
      */
     public function show($id)
     {
-        return $this->model::findOrFail($id);
+        return $this->class::findOrFail($id);
     }
 
     /**
@@ -56,7 +69,7 @@ class MagicResourceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return $this->model::update($request->all());
+        return $this->class::update($request->all());
     }
 
     /**
@@ -67,7 +80,7 @@ class MagicResourceController extends Controller
      */
     public function destroy($id)
     {
-        return $this->model::destroy($id);
+        return $this->class::destroy($id);
     }
 
     //TODO: delete forever

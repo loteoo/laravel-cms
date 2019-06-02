@@ -5,6 +5,8 @@ namespace App;
 use App\Scopes\TypeScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Str;
 
 class MagicResource extends Model
 {
@@ -12,6 +14,18 @@ class MagicResource extends Model
     use SoftDeletes;
 
     protected $table = 'resources';
+
+
+    // public function setAttribute($key, $value) {
+
+    //     if ($value && in_array($this->structure, $key)) {
+    //         $this->
+    //     }
+
+    //     // Handover the rest to Laravel's own setAttribute(), so that other
+    //     // mutators will remain intact...
+    //     return parent::setAttribute($key, $value);
+    // }
 
     public static function getClassName() {
         return class_basename(static::class);
@@ -22,18 +36,21 @@ class MagicResource extends Model
     }
 
     public static function getCollectionName() {
-        return self::getResourceType() . 's';
+        return static::getResourceType() . 's';
     }
+
 
 
     public static function boot() {
 
         parent::boot();
 
-        static::addGlobalScope(new TypeScope);
+        static::addGlobalScope('type', function (Builder $builder) {
+            $builder->where('type', static::getResourceType());
+        });
 
-        self::creating(function($model){
-            $model->type = self::getResourceType();
+        self::creating(function($model) {
+            $model->type = static::getResourceType();
         });
 
         // self::created(function($model){
@@ -55,5 +72,13 @@ class MagicResource extends Model
         // self::deleted(function($model){
         //     // ... code here
         // });
+
     }
+
+
+
+    public function fields() {
+        return $this->hasMany('App\Field', 'resource_id');
+    }
+
 }

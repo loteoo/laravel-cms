@@ -28,6 +28,7 @@ Route::get('/admin', function () {
 
 Route::get('/admin/{type}', function ($type) {
     return view('collection', [
+        'type' => $type,
         'resources' => Cms::getMagicResources(),
         'collection' => Cms::getResourceClass($type)::all(),
     ]);
@@ -35,6 +36,8 @@ Route::get('/admin/{type}', function ($type) {
 
 Route::get('/admin/{type}/{id}', function ($type, $id) {
     return view('resource', [
+        'type' => $type,
+        'id' => $id,
         'resources' => Cms::getMagicResources(),
         'resource' => Cms::getResourceClass($type)::findOrFail($id),
     ]);

@@ -9,5 +9,6 @@ class Movie extends MagicResource
 {
 
 
+    public $structure = ['title', 'description', 'rating'];
 
 }
