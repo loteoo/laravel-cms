@@ -13,23 +13,19 @@ use App\MagicResources\Movie;
 |
 */
 
+
+use App\Cms;
+
 Route::get('/', function () {
-
-
-
     return Movie::getResourceType();
 });
 
-    Route::get('/admin', function () {
+Route::get('/admin', function () {
 
 
-    $modelNamespace = 'MagicResources';
-    $resources = collect(File::allFiles(app_path($modelNamespace)))->map(function ($absPath) {
-        return $absPath;
-    });
 
 
     return view('admin', [
-        'resources' => $resources
+        'resources' => Cms::getMagicResources()
     ]);
 });
